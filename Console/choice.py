@@ -6,5 +6,5 @@ class Choice:
     def getName(self):
         return self.__name
 
-    def perform(self):
-        self.__action()
+    def perform(self, game):
+        self.__action(game)
