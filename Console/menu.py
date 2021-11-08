@@ -1,31 +1,35 @@
 from choice import Choice
 from location import Location
+from functools import partial
+from place import Place
 
 
 class Menu:
     __menu = dict()
+    MENU = 0
+    LOCATION = 1
+
     def __quit(game):
         game.quit()
 
     def __play(game):
         game.createPlayer()
-        game.setMenu("BarnekVillage")
+        game.setMenu("Adventure")
 
     def init():
+        Location.init()
         # const choices
-        quit = Choice("Exit", Menu.__quit)
+        Menu.__QUIT = Choice("Exit", Menu.__quit)
 
         # main menu
         menu = Menu("MainMenu")
-        menu.setDescription("Główne Menu Gry")
+        menu.setDescription("Main Menu")
         menu.addChoice(Choice("Play", Menu.__play))
-        menu.addChoice(quit)
+        menu.addChoice(Menu.__QUIT)
 
-        # Barnek Village
-        menu = Menu("BarnekVillage")
-        menu.setDescription("Wioska Barnek.\nMała i niczym nie wyróżniająca się.")
+        # Adventure
+        menu = Menu("Adventure")
         menu.linkLocation("BarnekVillage")
-        menu.addChoice(quit)
 
     def addMenu(menu):
         Menu.__menu[menu.getName()] = menu
@@ -38,8 +42,8 @@ class Menu:
 
     def __init__(self, name):
         self.__name = name
-        self.__choices = dict()
-        self.__description = str()
+        self.reset()
+        self.__type = Menu.MENU
         Menu.addMenu(self)
 
     def setDescription(self, description):
@@ -54,8 +58,28 @@ class Menu:
     def getName(self):
         return self.__name
 
+    def getType(self):
+        return self.__type
+
     def display(self):
-        menus = Menu.getMenus()
         print(self.__description, "\n")
         for i, choice in self.__choices.items():
             print(f"{i+1}. {self.__choices[i].getName()}")
+
+    def reset(self):
+        self.__choices = dict()
+        self.__description = str()
+        self.__type = Menu.MENU
+
+    def linkLocation(self, location):
+        self.reset()
+        self.__type = Menu.LOCATION
+        self.__location = Location.getLocation(location)
+        self.setDescription(self.getLocation().getDescription())
+        places = self.getLocation().getPlaces()
+        for place in places:
+            self.addChoice(Choice(place.getName(), partial(Place.visit, place)))
+
+
+    def getLocation(self):
+        return self.__location

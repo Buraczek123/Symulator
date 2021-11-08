@@ -33,8 +33,8 @@ class Main:
 
     def createPlayer(self):
         self.clear()
-        name = input("Jak chcesz sie nazywac?\n")
-        self.player = Player(name)
+        name = input("What's your name?\n")
+        self.player = Player(name, 25, 3)
 
 if __name__ == "__main__":
     Main()
