@@ -1,31 +1,45 @@
 from monsters import Monsters
+from random import randint
+from battle import Battle
+
 class Place:
     __places = dict()
     SHOP = 0
     ARENA = 1
+    visit = dict()
 
     def init():
         Monsters.init()
+        Place.visit[Place.SHOP] = Place.visit_SHOP
+        Place.visit[Place.ARENA] = Place.visit_ARENA
         # glade
-        place = Place("Glade", Place.ARENA)
+        place = Place("Glade")
         place.addMonster(Monsters.getMonster("Rabbit"))
 
     def getPlace(name):
         return Place.__places[name]
 
-    def visit(place, game):
-        print(f"odwiedzasz {place.getName()}")
-        from os import system
-        system("pause")
+    def visit_SHOP(place, game):
+        pass
 
-    def __init__(self, name, type):
+    def visit_ARENA(place, game):
+        monsters = place.getMonsters()
+        monster = monsters[randint(0, len(monsters)-1)]()
+        game.clear()
+        print(f"You've encountered {monster.getName()}")
+        Battle.battle(game.getPlayer(), monster)
+
+    def __init__(self, name):
         self.__name = name
-        self.__type = type
+        self.__type = Place.SHOP
 
         Place.__places[name] = self
 
     def getName(self):
         return self.__name
+
+    def getType(self):
+        return self.__type
 
     def addMonster(self, monster):
         try:
@@ -33,4 +47,8 @@ class Place:
                 self.__monsters.append(monster)
         except:
             self.__monsters = list()
+            self.__type = Place.ARENA
             self.addMonster(monster)
+
+    def getMonsters(self):
+        return self.__monsters

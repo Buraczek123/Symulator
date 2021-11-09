@@ -75,10 +75,10 @@ class Menu:
         self.reset()
         self.__type = Menu.LOCATION
         self.__location = Location.getLocation(location)
-        self.setDescription(self.getLocation().getDescription())
+        self.setDescription("You are currently in:\n" + self.getLocation().getDescription())
         places = self.getLocation().getPlaces()
         for place in places:
-            self.addChoice(Choice(place.getName(), partial(Place.visit, place)))
+            self.addChoice(Choice(place.getName(), partial(Place.visit[place.getType()], place)))
 
 
     def getLocation(self):

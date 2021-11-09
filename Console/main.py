@@ -34,7 +34,10 @@ class Main:
     def createPlayer(self):
         self.clear()
         name = input("What's your name?\n")
-        self.player = Player(name, 25, 3)
+        self.__player = Player(name)
+
+    def getPlayer(self):
+        return self.__player
 
 if __name__ == "__main__":
     Main()
