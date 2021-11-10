@@ -14,7 +14,8 @@ class Place:
         Place.visit[Place.ARENA] = Place.visit_ARENA
         # glade
         place = Place("Glade")
-        place.addMonster(Monsters.getMonster("Rabbit"))
+        place.addMonster(Monsters.getMonster("Slime"))
+        place.addMonster(Monsters.getMonster("GoblinYoung"))
 
     def getPlace(name):
         return Place.__places[name]
@@ -26,7 +27,6 @@ class Place:
         monsters = place.getMonsters()
         monster = monsters[randint(0, len(monsters)-1)]()
         game.clear()
-        print(f"You've encountered {monster.getName()}")
         Battle.battle(game.getPlayer(), monster)
 
     def __init__(self, name):

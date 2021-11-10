@@ -35,6 +35,7 @@ class Main:
         self.clear()
         name = input("What's your name?\n")
         self.__player = Player(name)
+        self.clear()
 
     def getPlayer(self):
         return self.__player
